@@ -1,0 +1,127 @@
+/**
+* 2007-2021 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author    Anthony Figueroa - Shoplync Inc <sales@shoplync.com>
+*  @copyright 2007-2021 Shoplync Inc
+*  @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*
+* Don't forget to prefix your containers with your own identifier
+* to avoid any conflicts with others containers.
+*/
+.mx-auto {
+	margin: 0 auto!important;
+}
+.block,
+.img-block {
+	display:block;
+}
+.h-100 {
+	height:100%!important;
+}
+.w-100 {
+	width: 100%;
+}
+.w-90 {
+	width: 90%;
+}
+.w-80 {
+	width: 80%;
+}
+.w-70 {
+	width: 70%;
+}
+.w-60 {
+	width: 60%;
+}
+.w-50 {
+	width: 50%;
+}
+.w-40 {
+	width: 40%;
+}
+.w-30 {
+	width: 30%;
+}
+.hidden {
+    display:none!important;
+}
+
+.panel form:first-child {
+    display: block;
+}
+
+.text-decoration-none{
+    text-decoration: none!important;
+    color:inherit!important;
+}
+.outline-none,
+.outline-none:active,
+.outline-none:focus{
+    outline:none!important;
+}
+.display-5{
+    font-size:2.5rem;
+}
+    
+#accordion div.card {
+    border: 1px solid #f1f1f1;
+    border-radius: 10px;
+}
+#accordion div.card div.card-header:hover:hover {
+    background: #f1f1f1;
+}
+#accordion div.card #collapseOne{
+    border-top: 1px solid rgb(241, 241, 241);
+}
+#accordion div.card div.card-header button.collapsed:before {
+    content: "\2b";
+}
+
+#accordion div.card div.card-header button:before {
+    content: "\2212";
+}
+
+#accordion div.card div.card-header button:before,
+#accordion div.card div.card-header button.collapsed:before  {
+    float: left;
+    background: rgb(241 241 241 / 65%);
+    width: 44px;
+    text-align: center;
+    line-height: 44px;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+
+#accordion div.card:hover div.card-header button:before,
+#accordion div.card:hover div.card-header button.collapsed:before  {
+    color: #00aff0;
+}
+
+#brands-table.table thead>tr>th{
+    font-weight:bold!important;
+    font-size:0.9rem;
+}
+#brands-table.table tbody>tr>td{
+    padding:8px!important;
+    font-size: .8rem!important;
+}
+#brands-table.table input{
+    transform: scale(1.5);
+}
