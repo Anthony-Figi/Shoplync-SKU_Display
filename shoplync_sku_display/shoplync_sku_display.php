@@ -61,7 +61,7 @@ class Shoplync_sku_display extends Module
      */
     public function install()
     {
-        Configuration::updateValue('SHOPLYNC_SKU_DISPLAY_LIVE_MODE', false);
+        Configuration::updateValue('SHOPLYNC_SKU_COMBINATION_HIDE', false);
 
         include(dirname(__FILE__).'/sql/install.php');
 
@@ -70,13 +70,12 @@ class Shoplync_sku_display extends Module
             $this->registerHook('displayBackOfficeHeader') &&
             $this->registerHook('productActions') &&
             $this->registerHook('displayProductAdditionalInfo') &&
-            $this->registerHook('displayProductButtons') && 
-            $this->registerHook('addWebserviceResources');
+            $this->registerHook('displayProductButtons');
     }
 
     public function uninstall()
     {
-        Configuration::deleteByName('SHOPLYNC_SKU_DISPLAY_LIVE_MODE');
+        Configuration::deleteByName('SHOPLYNC_SKU_COMBINATION_HIDE');
 
         include(dirname(__FILE__).'/sql/uninstall.php');
 
@@ -121,6 +120,7 @@ class Shoplync_sku_display extends Module
         $this->context->smarty->assign('update_action', 'submitShoplync_sku_displayUpdateHide');
         $this->context->smarty->assign('modul_action', 'submitShoplync_sku_displayModule');
 
+        $this->context->smarty->assign('module_settings', $this->renderForm());
 
         $brandsList = $this->GetBrandsList();
         if (!empty($brandsList))
@@ -235,16 +235,16 @@ class Shoplync_sku_display extends Module
         return array(
             'form' => array(
                 'legend' => array(
-                'title' => $this->l('Settings'),
-                'icon' => 'icon-cogs',
+                'title' => $this->l(''),
+                //'icon' => 'icon-cogs',
                 ),
                 'input' => array(
                     array(
                         'type' => 'switch',
-                        'label' => $this->l('Live mode'),
-                        'name' => 'SHOPLYNC_SKU_DISPLAY_LIVE_MODE',
+                        'label' => $this->l('Hide For Combinations'),
+                        'name' => 'SHOPLYNC_SKU_COMBINATION_HIDE',
                         'is_bool' => true,
-                        'desc' => $this->l('Use this module in live mode'),
+                        'desc' => $this->l('Will hide SKU on products with unselected options. (For developers only, must be disabled via JavaScript on the front end)'),
                         'values' => array(
                             array(
                                 'id' => 'active_on',
@@ -257,19 +257,6 @@ class Shoplync_sku_display extends Module
                                 'label' => $this->l('Disabled')
                             )
                         ),
-                    ),
-                    array(
-                        'col' => 3,
-                        'type' => 'text',
-                        'prefix' => '<i class="icon icon-envelope"></i>',
-                        'desc' => $this->l('Enter a valid email address'),
-                        'name' => 'SHOPLYNC_SKU_DISPLAY_ACCOUNT_EMAIL',
-                        'label' => $this->l('Email'),
-                    ),
-                    array(
-                        'type' => 'password',
-                        'name' => 'SHOPLYNC_SKU_DISPLAY_ACCOUNT_PASSWORD',
-                        'label' => $this->l('Password'),
                     ),
                 ),
                 'submit' => array(
@@ -285,9 +272,7 @@ class Shoplync_sku_display extends Module
     protected function getConfigFormValues()
     {
         return array(
-            'SHOPLYNC_SKU_DISPLAY_LIVE_MODE' => Configuration::get('SHOPLYNC_SKU_DISPLAY_LIVE_MODE', true),
-            'SHOPLYNC_SKU_DISPLAY_ACCOUNT_EMAIL' => Configuration::get('SHOPLYNC_SKU_DISPLAY_ACCOUNT_EMAIL', 'contact@prestashop.com'),
-            'SHOPLYNC_SKU_DISPLAY_ACCOUNT_PASSWORD' => Configuration::get('SHOPLYNC_SKU_DISPLAY_ACCOUNT_PASSWORD', null),
+            'SHOPLYNC_SKU_COMBINATION_HIDE' => Configuration::get('SHOPLYNC_SKU_COMBINATION_HIDE', true),
         );
     }
 
@@ -367,61 +352,9 @@ class Shoplync_sku_display extends Module
              $hide_sku = '<style>#product_sku{ display:none!important; height:0!important; }</style>';
         }
         
-        return '<div id="product_sku" '.($has_combinations ? 'style="display:none; height:0;"' : '').'><label class="label">SKU: </label>'.
+        return '<div id="product_sku" '.($has_combinations && Configuration::get('SHOPLYNC_SKU_COMBINATION_HIDE') == 1 ? 'style="display:none; height:0;"' : '').'><label class="label">SKU: </label>'.
                '<span>'.$sku_reference.'</span></div>'.'<!-- '.$mpn.' '.$brand.' -->'.$hide_sku;
     }
     public function hookDisplayProductButtons(){} 
     public function hookProductActions(){}
-    
-    /**
-     * Addition of the new entity to the webservice
-     * @param $ params
-     * @return array
-     */ 
-    public function hookAddWebserviceResources($params) { 
-        return [
-            'samples' => [  // Parameter name $ webserviceParameters ['objectsNodeName'] of class Object 
-                'description' => 'Sample new entity for API', 
-                'class' => 'Sample'
-            ], 
-        ];
-    }
-    
-}
-
-class Sample extends ObjectModel
-{
-    /** @var string name */ 
-    public  $sku;
- 
-    /** @var string Document reference */ 
-    public  $reference;
- 
-    /** @var string description */ 
-    public  $id_product;
- 
-    /**
-     * Definition of class parameters
-     */ 
-    public static $definition = array( 
-        'table' => 'shoplync_sku_display', 
-        'primary' => 'brand_id', 
-        'multilang' => false, 
-        'multilang_shop' => false, 
-        'fields' => array( 
-            'mpn_hide' => array('type' => self::TYPE_BOOLEAN , 'validate' => 'isCleanHtml',  'size'  => 255 ), 
-            'sku_hide' => array('type' => self::TYPE_BOOLEAN , 'validate' => 'isCleanHtml' , 'size' => 255, 'lang' => true), 
-        ), 
-    );
- 
-    /**
-     * Class mapping with the webservice
-     * 
-     * @var type 
-     */ 
-    protected $webserviceParameters = [ 
-        'objectsNodeName' => 'samples',  // objectsNodeName must be the value declared in the hookAddWebserviceResources (list of entities) 
-        'objectNodeName' => 'sample',  // Detail of an entity 
-        'fields' => [ ] 
-    ]; 
 }

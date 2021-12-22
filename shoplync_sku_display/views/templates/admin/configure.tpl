@@ -97,6 +97,14 @@
             <hr />
 			</div>
             <br>
+        </div>
+		<div class="row">
+            <div class="col-xs-12">
+            {$module_settings}
+            </div>
+        </div>
+		<div class="row">
+            <br>
             {if isset($brands) && isset($update_action) && isset($action_link) && isset($token) }
             <div class="col-xs-3"></div>
             <div class="col-xs-6">
